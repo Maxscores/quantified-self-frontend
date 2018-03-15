@@ -58,6 +58,13 @@
 	  foodService.validateFood();
 	});
 
+	$("#delete").on('click', function (e) {
+	  e.preventDefault();
+	  e.target.remove();
+	  ///
+	  foodService.destroyFood(id);
+	});
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -161,12 +168,24 @@
 	      }
 	    }
 	  }, {
-	    key: "clearFields",
-	    value: function clearFields() {
-	      var $foodForm = $('.food-form');
-	      $foodForm.find('input[name="name"]').val("");
-	      $foodForm.find('input[name="calories"]').val("");
-	      $foodForm.find('.error').remove();
+	    key: "destroyFood",
+	    value: function destroyFood(id) {
+	      fetch(this.baseUrl + "/" + id), {
+	        method: "DELETE" }.then(this.getFoods()).catch(errorLog);
+	    }
+	  }, {
+	    key: "postFood",
+	    value: function postFood(foodInfo) {
+	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.getFoods()).catch(errorLog);
+	    }
+	  }, {
+	    key: "postConfig",
+	    value: function postConfig(foodInfo) {
+	      return {
+	        method: 'POST',
+	        headers: { 'Content-Type': "application/json" },
+	        body: JSON.stringify(foodInfo)
+	      };
 	    }
 	  }]);
 
