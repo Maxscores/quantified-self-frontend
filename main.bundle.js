@@ -87,20 +87,56 @@
 	  _createClass(FoodService, [{
 	    key: "getFoods",
 	    value: function getFoods() {
+	      var _this = this;
+
 	      $('.foods-table').html('<th>Name</th><th>Calories</th>');
 	      fetch(this.baseUrl).then(handleResponse).then(function (foods) {
-	        foods.sort(function (food1, food2) {
-	          if (food1.id < food2.id) {
-	            return 1;
-	          } else {
-	            return -1;
-	          }
-	        });
-	        return foods.forEach(function (newFood) {
-	          var food = new Food(newFood.id, newFood.name, newFood.calories);
-	          food.appendFood();
-	        });
+	        return _this.sortFoods(foods);
+	      }).then(function (foods) {
+	        return _this.appendFoods(foods);
 	      }).catch(errorLog);
+	    }
+	  }, {
+	    key: "postFood",
+	    value: function postFood(foodInfo) {
+	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.newFoodObject).then(function (food) {
+	        return food.prependFood();
+	      }).then(this.clearFields).catch(errorLog);
+	    }
+	  }, {
+	    key: "postConfig",
+	    value: function postConfig(foodInfo) {
+	      return {
+	        method: 'POST',
+	        headers: { 'Content-Type': "application/json" },
+	        body: JSON.stringify(foodInfo)
+	      };
+	    }
+	  }, {
+	    key: "sortFoods",
+	    value: function sortFoods(foods) {
+	      return foods.sort(function (food1, food2) {
+	        if (food1.id < food2.id) {
+	          return 1;
+	        } else {
+	          return -1;
+	        }
+	      });
+	    }
+	  }, {
+	    key: "appendFoods",
+	    value: function appendFoods(foods) {
+	      var _this2 = this;
+
+	      return foods.forEach(function (newFood) {
+	        var food = _this2.newFoodObject(newFood);
+	        food.appendFood();
+	      });
+	    }
+	  }, {
+	    key: "newFoodObject",
+	    value: function newFoodObject(newFood) {
+	      return new Food(newFood.id, newFood.name, newFood.calories);
 	    }
 	  }, {
 	    key: "validateFood",
@@ -109,9 +145,11 @@
 	      var foodNameField = $foodForm.find('input[name="name"]');
 	      var foodCalorieField = $foodForm.find('input[name="calories"]');
 	      if (foodNameField.val() === "") {
-	        foodNameField.after('<br><span class="error">Please enter a food name</span><br>');
+	        $('.error:first').remove();
+	        foodNameField.after('<span class="error"><br>Please enter a food name</span>');
 	      } else if (foodCalorieField.val() === "") {
-	        foodCalorieField.after('<br><span class="error">Please enter a calorie amount</span><br>');
+	        $('.error:first').remove();
+	        foodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
 	      } else {
 	        var foodInfo = {
 	          food: {
@@ -123,18 +161,12 @@
 	      }
 	    }
 	  }, {
-	    key: "postFood",
-	    value: function postFood(foodInfo) {
-	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.getFoods()).catch(errorLog);
-	    }
-	  }, {
-	    key: "postConfig",
-	    value: function postConfig(foodInfo) {
-	      return {
-	        method: 'POST',
-	        headers: { 'Content-Type': "application/json" },
-	        body: JSON.stringify(foodInfo)
-	      };
+	    key: "clearFields",
+	    value: function clearFields() {
+	      var $foodForm = $('.food-form');
+	      $foodForm.find('input[name="name"]').val("");
+	      $foodForm.find('input[name="calories"]').val("");
+	      $foodForm.find('.error').remove();
 	    }
 	  }]);
 
@@ -171,9 +203,14 @@
 	      $('.foods-table').append(this.foodRow());
 	    }
 	  }, {
+	    key: 'prependFood',
+	    value: function prependFood() {
+	      $('.foods-table tr:first').before(this.foodRow());
+	    }
+	  }, {
 	    key: 'foodRow',
 	    value: function foodRow() {
-	      return '<tr><td>' + this.name + '</td><td>' + this.calories + '</td><td id="delete">delete</td></tr>';
+	      return '<tr id=' + this.id + '><td>' + this.name + '</td><td>' + this.calories + '</td><td id="delete">delete</td></tr>';
 	    }
 	  }]);
 
