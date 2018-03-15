@@ -206,12 +206,12 @@
 	  }, {
 	    key: "filterFoods",
 	    value: function filterFoods() {
-	      var filter = $('input[name="filter"]').val();
+	      var filter = $('input[name="filter"]').toLowerCase().val();
 	      var foods = $('.food');
 	      if (filter !== "") {
 	        foods.hide();
 	        $.each(foods, function (index, food) {
-	          if (food.innerHTML.includes(filter)) {
+	          if (food.innerHTML.toLowerCase().includes(filter)) {
 	            $("#" + food.id).show();
 	          }
 	        });
