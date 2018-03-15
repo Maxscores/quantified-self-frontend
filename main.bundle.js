@@ -58,11 +58,11 @@
 	  foodService.validateFood();
 	});
 
-	$("#delete").on('click', function (e) {
+	$(".foods-table").on('click', function (e) {
 	  e.preventDefault();
-	  e.target.remove();
-	  ///
-	  foodService.destroyFood(id);
+	  if (e.target.id === "delete") {
+	    foodService.destroyFood(e);
+	  }
 	});
 
 /***/ }),
@@ -169,9 +169,21 @@
 	    }
 	  }, {
 	    key: "destroyFood",
-	    value: function destroyFood(id) {
-	      fetch(this.baseUrl + "/" + id), {
-	        method: "DELETE" }.then(this.getFoods()).catch(errorLog);
+	    value: function destroyFood(e) {
+	      var _this3 = this;
+
+	      fetch(this.baseUrl + "/" + e.target.parentNode.id, { method: "DELETE" }).then(function (response) {
+	        return _this3.removeFoodFromDom(response, e);
+	      }).catch(errorLog);
+	    }
+	  }, {
+	    key: "removeFoodFromDom",
+	    value: function removeFoodFromDom(response, e) {
+	      if (response.ok) {
+	        e.target.closest('tr').remove();
+	      } else {
+	        alert("Item can't be deleted due to meal association!");
+	      }
 	    }
 	  }, {
 	    key: "postFood",
