@@ -65,6 +65,10 @@
 	  }
 	});
 
+	$('input[name="filter"]').on('keyup', function () {
+	  foodService.filterFoods();
+	});
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -199,6 +203,22 @@
 	        body: JSON.stringify(foodInfo)
 	      };
 	    }
+	  }, {
+	    key: "filterFoods",
+	    value: function filterFoods() {
+	      var filter = $('input[name="filter"]').val();
+	      var foods = $('.food');
+	      if (filter !== "") {
+	        foods.hide();
+	        $.each(foods, function (index, food) {
+	          if (food.innerHTML.includes(filter)) {
+	            $("#" + food.id).show();
+	          }
+	        });
+	      } else {
+	        foods.show();
+	      }
+	    }
 	  }]);
 
 	  return FoodService;
@@ -241,7 +261,7 @@
 	  }, {
 	    key: 'foodRow',
 	    value: function foodRow() {
-	      return '<tr id=' + this.id + '><td>' + this.name + '</td><td>' + this.calories + '</td><td id="delete">delete</td></tr>';
+	      return '<tr class=\'food\' id=' + this.id + '>\n              <td>' + this.name + '</td>\n              <td>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
 	    }
 	  }]);
 
