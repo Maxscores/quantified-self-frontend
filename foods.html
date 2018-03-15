@@ -7,12 +7,13 @@
 <body>
   <h2>Manage Foods</h2>
 
-  <form class="food-form">
+  <form action="https://qs-1710-rails.herokuapp.com/api/v1/foods", method = "POST", class="food-form">
     Name:<br>
-    <input type="text" name="name" value=""><br>
+    <input type="text" name="food[name]" value=""><br>
     Calories:<br>
-    <input type="number" name="calories" value=""><br>
+    <input type="number" name="food[calories]" value=""><br>
     <input type="submit" name="" value="Add Food">
+    <div id="server-results"></div>
   </form>
 
   <form class="filter">
