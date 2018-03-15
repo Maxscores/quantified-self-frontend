@@ -101,7 +101,7 @@
 	    value: function postFood(foodInfo) {
 	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.newFoodObject).then(function (food) {
 	        return food.prependFood();
-	      }).catch(errorLog);
+	      }).then(this.clearFields).catch(errorLog);
 	    }
 	  }, {
 	    key: "postConfig",
@@ -145,9 +145,11 @@
 	      var foodNameField = $foodForm.find('input[name="name"]');
 	      var foodCalorieField = $foodForm.find('input[name="calories"]');
 	      if (foodNameField.val() === "") {
-	        foodNameField.after('<br><span class="error">Please enter a food name</span><br>');
+	        $('.error:first').remove();
+	        foodNameField.after('<span class="error"><br>Please enter a food name</span>');
 	      } else if (foodCalorieField.val() === "") {
-	        foodCalorieField.after('<br><span class="error">Please enter a calorie amount</span><br>');
+	        $('.error:first').remove();
+	        foodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
 	      } else {
 	        var foodInfo = {
 	          food: {
@@ -157,6 +159,14 @@
 	        };
 	        this.postFood(foodInfo);
 	      }
+	    }
+	  }, {
+	    key: "clearFields",
+	    value: function clearFields() {
+	      var $foodForm = $('.food-form');
+	      $foodForm.find('input[name="name"]').val("");
+	      $foodForm.find('input[name="calories"]').val("");
+	      $foodForm.find('.error').remove();
 	    }
 	  }]);
 
