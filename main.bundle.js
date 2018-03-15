@@ -206,7 +206,7 @@
 	  }, {
 	    key: "filterFoods",
 	    value: function filterFoods() {
-	      var filter = $('input[name="filter"]').toLowerCase().val();
+	      var filter = $('input[name="filter"]').val().toLowerCase();
 	      var foods = $('.food');
 	      if (filter !== "") {
 	        foods.hide();
