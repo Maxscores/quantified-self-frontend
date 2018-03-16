@@ -157,10 +157,10 @@
 	      var foodCalorieField = $foodForm.find('input[name="calories"]');
 	      if (foodNameField.val() === "") {
 	        $('.error:first').remove();
-	        foodNameField.after('<span class="error"><br>Please enter a food name</span>');
+	        foodNameField.after('<span class="error">Please enter a food name</span>');
 	      } else if (foodCalorieField.val() === "") {
 	        $('.error:first').remove();
-	        foodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
+	        foodCalorieField.after('<span class="error">Please enter a calorie amount</span>');
 	      } else {
 	        var foodInfo = {
 	          food: {
