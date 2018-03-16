@@ -1,22 +1,10 @@
 .title {
   padding: 1.5rem;
   text-align: center;
-  /* background-color: #EEBA0B; */
-  /* background-color: #70B77E; */
-  /* background-color: #E49273; */
-  /* background-color: #22AAA1; */
-  /* background-color: #EDF060; */
-  /* background-color: #F0F3BD; */
-  /* background-color: #F5F749; */
   /* background-color: #90C3C8; */
-  /* background-color: #B81365; */
-  /* background-color: #7D6B91; */
-  /* background-color: #E09F3E; */
-  /* background-color: #00FFC5; */
-  /* background-color: #88D498; */
-  /* background-color: #AF5B5B; */
-  background-color: #D9E5D6;
-  /* background-color: #DB93B0; */
+  background-color: #F5F749;
+  /* background-color: #88D498;   */
+  /* background-color: #D9E5D6; */
   width: 100%;
 }
 
@@ -51,22 +39,9 @@ input {
 }
 
 input[type=submit] {
-  /* background-color: #EEBA0B; */
-  /* background-color: #90C3C8; */
+  background-color: #F5F749;
   /* background-color: #88D498; */
-  /* background-color: #E49273; */
-  /* background-color: #22AAA1; */
-  /* background-color: #F5F749; */
-  /* background-color: #70B77E; */
-  /* background-color: #F0F3BD; */
-  /* background-color: #EDF060; */
-  /* background-color: #B81365; */
-  /* background-color: #00FFC5; */
-  /* background-color: #AF5B5B; */
-  /* background-color: #7D6B91; */
-  /* background-color: #E09F3E; */
-  /* background-color: #DB93B0; */
-  background-color: #D9E5D6;
+  /* background-color: #D9E5D6; */
   padding: 0 3rem;
   margin: 2rem 0;
   height: 6rem;
@@ -97,21 +72,7 @@ th {
 
 tr {
   padding: 0 1rem;
-  /* border-top: 10px solid #EEBA0B; */
-  /* border-top: 10px solid #90C3C8; */
+  border-top: 10px solid #F5F749;
   /* border-top: 10px solid #88D498; */
-  /* border-top: 10px solid #E49273; */
-  /* border-top: 10px solid #22AAA1; */
-  /* border-top: 10px solid #F5F749; */
-  /* border-top: 10px solid #70B77E; */
-  /* border-top: 10px solid #F0F3BD; */
-  /* border-top: 10px solid #EDF060; */
-  /* border-top: 10px solid #B81365; */
-  /* border-top: 10px solid #B81365; */
-  /* border-top: 10px solid #00FFC5; */
-  /* border-top: 10px solid #AF5B5B; */
-  /* border-top: 10px solid #7D6B91; */
-  /* border-top: 10px solid #E09F3E; */
-  /* border-top: 10px solid #DB93B0; */
-  border-top: 10px solid #D9E5D6;
+  /* border-top: 10px solid #D9E5D6; */
 }
