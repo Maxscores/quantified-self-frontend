@@ -7,7 +7,11 @@
   width: 100%;
 }
 
-.main {
+.h1 {
+  border-bottom: 1rem #086788 solid;
+}
+
+.main{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,6 +28,7 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 80%
 }
 
 
@@ -31,13 +36,21 @@ form {
   width: 100%;
 }
 
-input {
+input, select, select > option {
   height: 4.5rem;
   font-size: 4.5rem;
   margin-bottom: 1rem;
+  background-color: white;
+  width: 75%;
+
 }
 
-input[type=submit] {
+a, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+input[type=submit], .submit {
   background-color: #F5F749;
   /* background-color: #88D498; */
   /* background-color: #D9E5D6; */
@@ -74,4 +87,12 @@ tr {
   border-top: 10px solid #F5F749;
   /* border-top: 10px solid #88D498; */
   /* border-top: 10px solid #D9E5D6; */
+}
+
+.meal-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #086788;
 }
