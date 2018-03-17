@@ -3,9 +3,93 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Diary</title>
+  <link rel="stylesheet" href="./css/basscss.css">
+  <link rel="stylesheet" href="./css/main.css">
+
 </head>
 <body>
+  <div class="main">
+    <span class="title h1">Meal Diary</span>
+    <div class="meal-container">
+      <span class="title h2">Breakfast</span>
+      <table class="content h3" id="breakfast">
+        <th>Name</th>
+        <th>Calories</th>
+        <tr>
+          <td>Total Calories</td>
+        </tr>
+        <tr>
+          <td>Remaining Calories</td>
+        </tr>
+      </table>
+    </div>
 
+    <div class="meal-container">
+      <span class="title h2">Lunch</span>
+      <table class="content h3" id="lunch">
+        <th>Name</th>
+        <th>Calories</th>
+        <tr>
+          <td>Total Calories</td>
+        </tr>
+        <tr>
+          <td>Remaining Calories</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="meal-container">
+      <span class="title h2">Dinner</span>
+      <table class="content h3" id="dinner">
+        <th>Name</th>
+        <th>Calories</th>
+        <tr>
+          <td>Total Calories</td>
+        </tr>
+        <tr>
+          <td>Remaining Calories</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="meal-container">
+      <span class="title h2">Snacks</span>
+      <table class="content h3" id="snacks">
+        <th>Name</th>
+        <th>Calories</th>
+        <tr>
+          <td>Total Calories</td>
+        </tr>
+        <tr>
+          <td>Remaining Calories</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="meal-container h3" id="add-food">
+      <span class="title h2">Add Foods</span>
+      <a href="/foods.html" class="submit">Create New Food</a>
+      <form class="content filter h3">
+        Filter by Name:<br>
+        <input type="text" name="filter" value="">
+      </form>
+      <form class="content h3" id="meal-type">
+        Select Meal:<br>
+        <select name="meal">
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="snacks">Snacks</option>
+        </select>
+      </form>
+      <table class="content foods-table h3">
+        <th>Name</th>
+        <th>Calories</th>
+      </table>
+    </div>
+  </div>
+
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src="main.bundle.js"></script>
 </body>
 </html>
