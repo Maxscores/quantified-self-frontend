@@ -58,6 +58,17 @@
 	  foodService.validateFood();
 	});
 
+	$(".foods-table").on('click', function (e) {
+	  e.preventDefault();
+	  if (e.target.id === "delete") {
+	    foodService.destroyFood(e);
+	  }
+	});
+
+	$('input[name="filter"]').on('keyup', function () {
+	  foodService.filterFoods();
+	});
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -146,10 +157,10 @@
 	      var foodCalorieField = $foodForm.find('input[name="calories"]');
 	      if (foodNameField.val() === "") {
 	        $('.error:first').remove();
-	        foodNameField.after('<span class="error"><br>Please enter a food name</span>');
+	        foodNameField.after('<span class="error">Please enter a food name</span>');
 	      } else if (foodCalorieField.val() === "") {
 	        $('.error:first').remove();
-	        foodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
+	        foodCalorieField.after('<span class="error">Please enter a calorie amount</span>');
 	      } else {
 	        var foodInfo = {
 	          food: {
@@ -161,12 +172,52 @@
 	      }
 	    }
 	  }, {
-	    key: "clearFields",
-	    value: function clearFields() {
-	      var $foodForm = $('.food-form');
-	      $foodForm.find('input[name="name"]').val("");
-	      $foodForm.find('input[name="calories"]').val("");
-	      $foodForm.find('.error').remove();
+	    key: "destroyFood",
+	    value: function destroyFood(e) {
+	      var _this3 = this;
+
+	      fetch(this.baseUrl + "/" + e.target.parentNode.id, { method: "DELETE" }).then(function (response) {
+	        return _this3.removeFoodFromDom(response, e);
+	      }).catch(errorLog);
+	    }
+	  }, {
+	    key: "removeFoodFromDom",
+	    value: function removeFoodFromDom(response, e) {
+	      if (response.ok) {
+	        e.target.closest('tr').remove();
+	      } else {
+	        alert("Item can't be deleted due to meal association!");
+	      }
+	    }
+	  }, {
+	    key: "postFood",
+	    value: function postFood(foodInfo) {
+	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.getFoods()).catch(errorLog);
+	    }
+	  }, {
+	    key: "postConfig",
+	    value: function postConfig(foodInfo) {
+	      return {
+	        method: 'POST',
+	        headers: { 'Content-Type': "application/json" },
+	        body: JSON.stringify(foodInfo)
+	      };
+	    }
+	  }, {
+	    key: "filterFoods",
+	    value: function filterFoods() {
+	      var filter = $('input[name="filter"]').val().toLowerCase();
+	      var foods = $('.food');
+	      if (filter !== "") {
+	        foods.hide();
+	        $.each(foods, function (index, food) {
+	          if (food.innerHTML.toLowerCase().includes(filter)) {
+	            $("#" + food.id).show();
+	          }
+	        });
+	      } else {
+	        foods.show();
+	      }
 	    }
 	  }]);
 
@@ -210,7 +261,7 @@
 	  }, {
 	    key: 'foodRow',
 	    value: function foodRow() {
-	      return '<tr id=' + this.id + '><td>' + this.name + '</td><td>' + this.calories + '</td><td id="delete">delete</td></tr>';
+	      return '<tr class=\'food\' id=' + this.id + '>\n              <td>' + this.name + '</td>\n              <td>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
 	    }
 	  }]);
 

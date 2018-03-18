@@ -3,30 +3,35 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Manage Foods</title>
+  <link rel="stylesheet" href="./css/basscss.css">
+  <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-  <h2>Manage Foods</h2>
+  <div class="main">
 
-  <form class="food-form">
-    Name:<br>
-    <input type="text" name="name" value=""><br>
-    Calories:<br>
-    <input type="number" name="calories" value=""><br>
-    <input type="submit" name="" value="Add Food">
-    <div id="server-results"></div>
-  </form>
+    <span class="title h2">Manage Foods</span>
+    <div class="inputs">
+      <form class="content food-form h3">
+        <span class="form-title">Add New Foods</span>
+        Name<br>
+        <input type="text" name="name" value="">
+        Calories<br>
+        <input type="number" name="calories" value="">
+        <input type="submit" name="" value="Add Food">
+      </form>
 
-  <form class="filter">
-    Filter by Name:<br>
-    <input type="text" name="filter" value="">
-  </form>
+      <form class="content filter h3">
+        Filter by Name:<br>
+        <input type="text" name="filter" value="">
+      </form>
+    </div>
 
-  <table class="foods-table">
-    <th>Name</th>
-    <th>Calories</th>
-  </table>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'>
-  </script>
+    <table class="content foods-table h3">
+      <th>Name</th>
+      <th>Calories</th>
+    </table>
+  </div>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src="main.bundle.js"></script>
 </body>
 </html>
