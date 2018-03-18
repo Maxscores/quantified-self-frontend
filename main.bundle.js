@@ -67,6 +67,29 @@
 	    foodService.destroyFood(e);
 	  }
 	});
+	//
+	// $(".foods-table").on("click", (e) => {
+	//   e.preventDefault();
+	// })
+
+	// $(".foods-table").on("keydown", (e) => {
+	//   if (e.keycode === 13) {
+	//     foodService.validateFoodPatch();
+	//     $(this).blur();
+	//   }
+	// })
+
+	// $('.foods-table').blur( (e) => {
+	//   console.log(e.target);
+	//   foodService.validateFoodPatch(e.target);
+	// })
+
+
+	$("td[contentEditable]").blur(function (e) {
+	  e.preventDefault();
+	  console.log(e);
+	  foodService.validateFoodPatch(e);
+	});
 
 	$(".foods-table").on("focusout", function (e) {
 	  foodService.validateFoodPatch(e);
