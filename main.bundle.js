@@ -223,6 +223,7 @@
 	  }, {
 	    key: "patchFood",
 	    value: function patchFood(foodInfo, e) {
+<<<<<<< HEAD
 	      fetch(this.baseUrl + "/" + e.target.parentNode.id, this.patchConfig(foodInfo)).then(handleResponse).catch(errorLog);
 	    }
 	  }, {
@@ -233,6 +234,11 @@
 	        headers: { 'Content-Type': "application/json" },
 	        body: JSON.stringify(foodInfo)
 	      };
+=======
+	      fetch(this.baseUrl + "/" + e.target.parentNode.id), { method: "PATCH",
+	        headers: { 'Content-Type': "application/json" },
+	        body: JSON.stringify(foodInfo) }.then(handleResponse).catch(errorLog);
+>>>>>>> main.bundle.js add
 	    }
 	  }, {
 	    key: "destroyFood",
