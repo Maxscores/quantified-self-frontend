@@ -48,10 +48,13 @@
 
 	// const Food = require("./foods").Food
 	var FoodService = __webpack_require__(1);
+	var MealService = __webpack_require__(4);
 
 	var foodService = new FoodService();
+	var mealService = new MealService();
 
 	foodService.getFoods();
+	mealService.getMealFoods();
 
 	$(".food-form").on('submit', function (e) {
 	  e.preventDefault();
@@ -141,17 +144,10 @@
 	  }, {
 	    key: "appendFoods",
 	    value: function appendFoods(foods) {
-	      var _this2 = this;
-
 	      return foods.forEach(function (newFood) {
-	        var food = _this2.newFoodObject(newFood);
-	        food.appendFood();
+	        var food = new Food(newFood.id, newFood.name, newFood.calories);
+	        food.appendFood($('.foods-table'));
 	      });
-	    }
-	  }, {
-	    key: "newFoodObject",
-	    value: function newFoodObject(newFood) {
-	      return new Food(newFood.id, newFood.name, newFood.calories);
 	    }
 	  }, {
 	    key: "validateFood",
@@ -216,10 +212,10 @@
 	  }, {
 	    key: "destroyFood",
 	    value: function destroyFood(e) {
-	      var _this3 = this;
+	      var _this2 = this;
 
 	      fetch(this.baseUrl + "/" + e.target.parentNode.id, { method: "DELETE" }).then(function (response) {
-	        return _this3.removeFoodFromDom(response, e);
+	        return _this2.removeFoodFromDom(response, e);
 	      }).catch(errorLog);
 	    }
 	  }, {
@@ -292,8 +288,8 @@
 
 	  _createClass(Food, [{
 	    key: 'appendFood',
-	    value: function appendFood() {
-	      $('.foods-table').append(this.foodRow());
+	    value: function appendFood(table) {
+	      table.append(this.foodRow());
 	    }
 	  }, {
 	    key: 'prependFood',
@@ -337,6 +333,96 @@
 	};
 
 	module.exports = [handleResponse, errorLog];
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Food = __webpack_require__(2);
+
+	var _require = __webpack_require__(3),
+	    _require2 = _slicedToArray(_require, 2),
+	    handleResponse = _require2[0],
+	    errorLog = _require2[1];
+
+	var MealService = function () {
+	  function MealService() {
+	    _classCallCheck(this, MealService);
+
+	    this.baseUrl = "https://qs-1710-rails.herokuapp.com/api/v1/meals";
+	  }
+
+	  _createClass(MealService, [{
+	    key: 'getMealFoods',
+	    value: function getMealFoods() {
+	      var _this = this;
+
+	      fetch(this.baseUrl).then(handleResponse).then(function (meals) {
+	        return _this.addMeals(meals);
+	      }).catch(errorLog);
+	    }
+	  }, {
+	    key: 'addMeals',
+	    value: function addMeals(meals) {
+	      for (var i = 0; i < meals.length; i++) {
+	        $('#' + meals[i].name.toLowerCase()).find('table').html('<th>Name</th><th>Calories</th>');
+	        var foods = this.sortFoods(meals[i].foods);
+	        this.appendFoods(foods, meals[i].name);
+	        this.appendMealTotalCal(foods, meals[i].name);
+	      }
+	    }
+	  }, {
+	    key: 'sortFoods',
+	    value: function sortFoods(foods) {
+	      return foods.sort(function (food1, food2) {
+	        if (food1.id < food2.id) {
+	          return 1;
+	        } else {
+	          return -1;
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'appendFoods',
+	    value: function appendFoods(foods, mealName) {
+	      return foods.forEach(function (newFood) {
+	        var food = new Food(newFood.id, newFood.name, newFood.calories);
+	        food.appendFood($('#' + mealName.toLowerCase()).find('table'));
+	      });
+	    }
+	  }, {
+	    key: 'appendMealTotalCal',
+	    value: function appendMealTotalCal(foods, meal) {
+	      var total_cal = 0;
+	      foods.forEach(function (food) {
+	        total_cal += food.calories;
+	      });
+	      this.appendTotalCalRow($('#' + meal.toLowerCase()).find('table'), total_cal);
+	    }
+	  }, {
+	    key: 'appendTotalCalRow',
+	    value: function appendTotalCalRow(table, total_cal) {
+	      table.append(this.totalCalRow(total_cal));
+	    }
+	  }, {
+	    key: 'totalCalRow',
+	    value: function totalCalRow(total_cal) {
+	      return '<tr class=meal_total><td></td><td class=total_cal_label>Total Calories:</td><td class=total_calories>' + total_cal + '</td>';
+	    }
+	  }]);
+
+	  return MealService;
+	}();
+
+	module.exports = MealService;
 
 /***/ })
 /******/ ]);
