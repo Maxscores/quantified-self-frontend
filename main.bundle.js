@@ -67,27 +67,8 @@
 	    foodService.destroyFood(e);
 	  }
 	});
-	//
-	// $(".foods-table").on("click", (e) => {
-	//   e.preventDefault();
-	// })
 
-	// $(".foods-table").on("keydown", (e) => {
-	//   if (e.keycode === 13) {
-	//     foodService.validateFoodPatch();
-	//     $(this).blur();
-	//   }
-	// })
-
-	// $('.foods-table').blur( (e) => {
-	//   console.log(e.target);
-	//   foodService.validateFoodPatch(e.target);
-	// })
-
-
-	$("td[contentEditable]").blur(function (e) {
-	  e.preventDefault();
-	  console.log(e);
+	$(".foods-table").on("focusout", function (e) {
 	  foodService.validateFoodPatch(e);
 	});
 
@@ -223,7 +204,7 @@
 	  }, {
 	    key: "patchFood",
 	    value: function patchFood(foodInfo, e) {
-<<<<<<< HEAD
+
 	      fetch(this.baseUrl + "/" + e.target.parentNode.id, this.patchConfig(foodInfo)).then(handleResponse).catch(errorLog);
 	    }
 	  }, {
@@ -235,10 +216,10 @@
 	        body: JSON.stringify(foodInfo)
 	      };
 =======
-	      fetch(this.baseUrl + "/" + e.target.parentNode.id), { method: "PATCH",
 	        headers: { 'Content-Type': "application/json" },
-	        body: JSON.stringify(foodInfo) }.then(handleResponse).catch(errorLog);
->>>>>>> main.bundle.js add
+	        body: JSON.stringify(foodInfo)
+	      };
+>>>>>>> run npm run build
 	    }
 	  }, {
 	    key: "destroyFood",
