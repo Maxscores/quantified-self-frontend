@@ -195,6 +195,35 @@
 	      }
 	    }
 	  }, {
+	    key: "validateFoodPatch",
+	    value: function validateFoodPatch(e) {
+	      var $foodForm = $('.food-form');
+	      var foodNameField = $foodForm.find('input[name="name"]');
+	      var foodCalorieField = $foodForm.find('input[name="calories"]');
+	      if (foodNameField.val() === "") {
+	        $('.error:first').remove();
+	        foodNameField.after('<span class="error"><br>Please enter a food name</span>');
+	      } else if (foodCalorieField.val() === "") {
+	        $('.error:first').remove();
+	        foodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
+	      } else {
+	        var foodInfo = {
+	          food: {
+	            name: foodNameField.val(),
+	            calories: foodCalorieField.val()
+	          }
+	        };
+	        this.patchFood(foodInfo, e);
+	      }
+	    }
+	  }, {
+	    key: "patchFood",
+	    value: function patchFood(foodInfo, e) {
+	      fetch(this.baseUrl + "/" + e.target.parentNode.id), { method: "PATCH",
+	        headers: { 'Content-Type': "application/json" },
+	        body: JSON.stringify(foodInfo) }.then(handleResponse).catch(errorLog);
+	    }
+	  }, {
 	    key: "destroyFood",
 	    value: function destroyFood(e) {
 	      var _this3 = this;
