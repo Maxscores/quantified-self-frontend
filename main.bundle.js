@@ -415,7 +415,7 @@
 	  }, {
 	    key: 'totalCalRow',
 	    value: function totalCalRow(total_cal) {
-	      return '<tr class=meal_total><td></td><td class=total_cal_label>Total Calories:</td><td class=total_calories>' + total_cal + '</td>';
+	      return '<tr class=meal_total><td class=total_cal_label>Total Calories:</td><td class=total_calories>' + total_cal + '</td><td></td>';
 	    }
 	  }]);
 
