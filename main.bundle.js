@@ -64,27 +64,8 @@
 	    foodService.destroyFood(e);
 	  }
 	});
-	//
-	// $(".foods-table").on("click", (e) => {
-	//   e.preventDefault();
-	// })
 
-	// $(".foods-table").on("keydown", (e) => {
-	//   if (e.keycode === 13) {
-	//     foodService.validateFoodPatch();
-	//     $(this).blur();
-	//   }
-	// })
-
-	// $('.foods-table').blur( (e) => {
-	//   console.log(e.target);
-	//   foodService.validateFoodPatch(e.target);
-	// })
-
-
-	$("td[contentEditable]").blur(function (e) {
-	  e.preventDefault();
-	  console.log(e);
+	$(".foods-table").on("focusout", function (e) {
 	  foodService.validateFoodPatch(e);
 	});
 
@@ -197,20 +178,22 @@
 	  }, {
 	    key: "validateFoodPatch",
 	    value: function validateFoodPatch(e) {
-	      var $foodForm = $('.food-form');
-	      var foodNameField = $foodForm.find('input[name="name"]');
-	      var foodCalorieField = $foodForm.find('input[name="calories"]');
-	      if (foodNameField.val() === "") {
+	      var rowId = e.target.parentNode.id;
+	      var $foodsRow = $("tr#" + rowId);
+	      var editFoodNameField = $foodsRow.find('td:nth-child(1)');
+	      var editFoodCalorieField = $foodsRow.find('td:nth-child(2)');
+
+	      if (editFoodNameField.html() === "") {
 	        $('.error:first').remove();
-	        foodNameField.after('<span class="error"><br>Please enter a food name</span>');
-	      } else if (foodCalorieField.val() === "") {
+	        editFoodNameField.after('<span class="error"><br>Please enter a food name</span>');
+	      } else if (editFoodCalorieField.html() === "") {
 	        $('.error:first').remove();
-	        foodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
+	        editFoodCalorieField.after('<span class="error"><br>Please enter a calorie amount</span>');
 	      } else {
 	        var foodInfo = {
 	          food: {
-	            name: foodNameField.val(),
-	            calories: foodCalorieField.val()
+	            name: editFoodNameField.html(),
+	            calories: editFoodCalorieField.html()
 	          }
 	        };
 	        this.patchFood(foodInfo, e);
@@ -219,9 +202,16 @@
 	  }, {
 	    key: "patchFood",
 	    value: function patchFood(foodInfo, e) {
-	      fetch(this.baseUrl + "/" + e.target.parentNode.id), { method: "PATCH",
+	      fetch(this.baseUrl + "/" + e.target.parentNode.id, this.patchConfig(foodInfo)).then(handleResponse).catch(errorLog);
+	    }
+	  }, {
+	    key: "patchConfig",
+	    value: function patchConfig(foodInfo, e) {
+	      return {
+	        method: "PATCH",
 	        headers: { 'Content-Type': "application/json" },
-	        body: JSON.stringify(foodInfo) }.then(handleResponse).catch(errorLog);
+	        body: JSON.stringify(foodInfo)
+	      };
 	    }
 	  }, {
 	    key: "destroyFood",
@@ -313,7 +303,7 @@
 	  }, {
 	    key: 'foodRow',
 	    value: function foodRow() {
-	      return '<tr class=\'food\' id=' + this.id + '>\n              <td>' + this.name + '</td>\n              <td>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
+	      return '<tr class=\'food\' id=' + this.id + '>\n              <td contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
 	    }
 	  }]);
 
