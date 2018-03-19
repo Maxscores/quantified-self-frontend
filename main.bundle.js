@@ -72,10 +72,6 @@
 	  foodService.validateFoodPatch(e);
 	});
 
-	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
-	});
-
 	$('input[name="filter"]').on('keyup', function () {
 	  foodService.filterFoods();
 	});
@@ -112,6 +108,7 @@
 	      var _this = this;
 
 	      $('.foods-table').html('<th>Name</th><th>Calories</th>');
+	      $('.add-foods-table').html('<th></th><th>Name</th><th>Calories</th>');
 	      fetch(this.baseUrl).then(handleResponse).then(function (foods) {
 	        return _this.sortFoods(foods);
 	      }).then(function (foods) {
@@ -150,7 +147,8 @@
 	    value: function appendFoods(foods) {
 	      return foods.forEach(function (newFood) {
 	        var food = new Food(newFood.id, newFood.name, newFood.calories);
-	        food.appendFood($('.foods-table'));
+	        food.appendFoodCheckable($('.add-foods-table'));
+	        food.appendFoodDeletable($('.foods-table'));
 	      });
 	    }
 	  }, {
@@ -291,9 +289,14 @@
 	  }
 
 	  _createClass(Food, [{
-	    key: 'appendFood',
-	    value: function appendFood(table) {
-	      table.append(this.foodRow());
+	    key: 'appendFoodCheckable',
+	    value: function appendFoodCheckable(table) {
+	      table.append(this.foodRowCheckable());
+	    }
+	  }, {
+	    key: 'appendFoodDeletable',
+	    value: function appendFoodDeletable(table) {
+	      table.append(this.foodRowDeletable());
 	    }
 	  }, {
 	    key: 'prependFood',
@@ -301,9 +304,14 @@
 	      $('.foods-table tr:first').before(this.foodRow());
 	    }
 	  }, {
-	    key: 'foodRow',
-	    value: function foodRow() {
+	    key: 'foodRowDeletable',
+	    value: function foodRowDeletable() {
 	      return '<tr class=\'food\' id=' + this.id + '>\n              <td contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
+	    }
+	  }, {
+	    key: 'foodRowCheckable',
+	    value: function foodRowCheckable() {
+	      return '<tr class=\'food\' id=\'' + this.id + '\'>\n              <td><input type="checkbox" id="' + this.id + '"> </td>\n              <td contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n            </tr>';
 	    }
 	  }]);
 
@@ -399,7 +407,7 @@
 	    value: function appendFoods(foods, mealName) {
 	      return foods.forEach(function (newFood) {
 	        var food = new Food(newFood.id, newFood.name, newFood.calories);
-	        food.appendFood($('#' + mealName.toLowerCase()).find('table'));
+	        food.appendFoodDeletable($('#' + mealName.toLowerCase()).find('table'));
 	      });
 	    }
 	  }, {
