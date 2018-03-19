@@ -409,17 +409,35 @@
 	      foods.forEach(function (food) {
 	        total_cal += food.calories;
 	      });
-	      this.appendTotalCalRow($('#' + meal.toLowerCase()).find('table'), total_cal);
+	      this.appendCalorieRows($('#' + meal.toLowerCase()).find('table'), total_cal, meal);
 	    }
 	  }, {
-	    key: 'appendTotalCalRow',
-	    value: function appendTotalCalRow(table, total_cal) {
+	    key: 'appendCalorieRows',
+	    value: function appendCalorieRows(table, total_cal, meal) {
 	      table.append(this.totalCalRow(total_cal));
+	      table.append(this.remainingCaloriesRow(total_cal, meal));
 	    }
 	  }, {
 	    key: 'totalCalRow',
 	    value: function totalCalRow(total_cal) {
-	      return '<tr class=meal_total><td class=total_cal_label>Total Calories:</td><td class=total_calories>' + total_cal + '</td><td></td>';
+	      return '<tr class=meal_total>\n              <td class="total_cal_label">Total Calories:</td>\n              <td class="total_calories">' + total_cal + '</td>\n            </tr>';
+	    }
+	  }, {
+	    key: 'remainingCaloriesRow',
+	    value: function remainingCaloriesRow(total_cal, meal) {
+	      if (meal === "Snack") {
+	        var goal = 200;
+	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (goal - total_cal) + '</td>\n              </tr>';
+	      } else if (meal === "Breakfast") {
+	        var _goal = 400;
+	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (_goal - total_cal) + '</td>\n              </tr>';
+	      } else if (meal === "Lunch") {
+	        var _goal2 = 600;
+	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (_goal2 - total_cal) + '</td>\n              </tr>';
+	      } else if (meal === "Dinner") {
+	        var _goal3 = 800;
+	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (_goal3 - total_cal) + '</td>\n              </tr>';
+	      }
 	    }
 	  }]);
 
