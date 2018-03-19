@@ -119,7 +119,7 @@
 	    key: "postFood",
 	    value: function postFood(foodInfo) {
 	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.newFoodObject).then(function (food) {
-	        return food.prependFood();
+	        return food.prependFood($('.foods-table tr:first'));
 	      }).then(this.clearFields).catch(errorLog);
 	    }
 	  }, {
@@ -147,8 +147,8 @@
 	    value: function appendFoods(foods) {
 	      return foods.forEach(function (newFood) {
 	        var food = new Food(newFood.id, newFood.name, newFood.calories);
-	        food.appendFoodCheckable($('.add-foods-table'));
-	        food.appendFoodDeletable($('.foods-table'));
+	        food.appendFood($('.add-foods-table'), 'checkbox');
+	        food.appendFood($('.foods-table'), 'delete');
 	      });
 	    }
 	  }, {
@@ -289,19 +289,18 @@
 	  }
 
 	  _createClass(Food, [{
-	    key: 'appendFoodCheckable',
-	    value: function appendFoodCheckable(table) {
-	      table.append(this.foodRowCheckable());
-	    }
-	  }, {
-	    key: 'appendFoodDeletable',
-	    value: function appendFoodDeletable(table) {
-	      table.append(this.foodRowDeletable());
+	    key: 'appendFood',
+	    value: function appendFood(table, type) {
+	      if (type === 'delete') {
+	        table.append(this.foodRowDeletable());
+	      } else if (type === 'checkbox') {
+	        table.append(this.foodRowCheckable());
+	      }
 	    }
 	  }, {
 	    key: 'prependFood',
-	    value: function prependFood() {
-	      $('.foods-table tr:first').before(this.foodRow());
+	    value: function prependFood(table) {
+	      table.before(this.foodRowDeletable());
 	    }
 	  }, {
 	    key: 'foodRowDeletable',
@@ -407,7 +406,7 @@
 	    value: function appendFoods(foods, mealName) {
 	      return foods.forEach(function (newFood) {
 	        var food = new Food(newFood.id, newFood.name, newFood.calories);
-	        food.appendFoodDeletable($('#' + mealName.toLowerCase()).find('table'));
+	        food.appendFood($('#' + mealName.toLowerCase()).find('table'), 'delete');
 	      });
 	    }
 	  }, {
