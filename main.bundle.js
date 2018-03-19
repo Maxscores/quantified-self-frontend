@@ -438,16 +438,32 @@
 	    value: function remainingCaloriesRow(total_cal, meal) {
 	      if (meal === "Snack") {
 	        var goal = 200;
-	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (goal - total_cal) + '</td>\n              </tr>';
+	        if (goal - total_cal < 0) {
+	          return '<tr class=remaining_cals>\n        <td class="negative_cal_label">Calories Remaining:</td>\n        <td class="negative_cal">' + (goal - total_cal) + '</td>\n        </tr>';
+	        } else if (goal - total_cal > 0) {
+	          return '<tr class=remaining_cals>\n        <td class="positive_cal_label">Calories Remaining:</td>\n        <td class="positive_cal">' + (goal - total_cal) + '</td>\n        </tr>';
+	        }
 	      } else if (meal === "Breakfast") {
 	        var _goal = 400;
-	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (_goal - total_cal) + '</td>\n              </tr>';
+	        if (_goal - total_cal < 0) {
+	          return '<tr class=remaining_cals>\n        <td class="negative_cal_label">Calories Remaining:</td>\n        <td class="negative_cal">' + (_goal - total_cal) + '</td>\n        </tr>';
+	        } else if (_goal - total_cal > 0) {
+	          return '<tr class=remaining_cals>\n        <td class="positive_cal_label">Calories Remaining:</td>\n        <td class="positive_cal">' + (_goal - total_cal) + '</td>\n        </tr>';
+	        }
 	      } else if (meal === "Lunch") {
 	        var _goal2 = 600;
-	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (_goal2 - total_cal) + '</td>\n              </tr>';
+	        if (_goal2 - total_cal < 0) {
+	          return '<tr class=remaining_cals>\n        <td class="negative_cal_label">Calories Remaining:</td>\n        <td class="negative_cal">' + (_goal2 - total_cal) + '</td>\n        </tr>';
+	        } else if (_goal2 - total_cal > 0) {
+	          return '<tr class=remaining_cals>\n        <td class="positive_cal_label">Calories Remaining:</td>\n        <td class="positive_cal">' + (_goal2 - total_cal) + '</td>\n        </tr>';
+	        }
 	      } else if (meal === "Dinner") {
 	        var _goal3 = 800;
-	        return '<tr class=remaining_cals>\n                <td class="remain_cal_label">Calories Remaining:</td>\n                <td class="remain_cals">' + (_goal3 - total_cal) + '</td>\n              </tr>';
+	        if (_goal3 - total_cal < 0) {
+	          return '<tr class=remaining_cals>\n        <td class="negative_cal_label">Calories Remaining:</td>\n        <td class="negative_cal">' + (_goal3 - total_cal) + '</td>\n        </tr>';
+	        } else if (_goal3 - total_cal > 0) {
+	          return '<tr class=remaining_cals>\n        <td class="positive_cal_label">Calories Remaining:</td>\n        <td class="positive_cal">' + (_goal3 - total_cal) + '</td>\n        </tr>';
+	        }
 	      }
 	    }
 	  }]);
