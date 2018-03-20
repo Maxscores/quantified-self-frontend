@@ -432,30 +432,21 @@
 	  }, {
 	    key: 'postFoodsToMeal',
 	    value: function postFoodsToMeal(mealId, mealName) {
-	      var _this2 = this;
-
-	      var foods = $('.add-foods-table').find('input:checked');
-
-	      var _loop = function _loop() {
-	        var $food = $(foods[i]).parent().parent();
-	        fetch(_this2.baseUrl + '/' + mealId + '/foods/' + $food.attr('id'), _this2.postFoodToMealConfig()).then(handleResponse).then(function (response) {
-	          return _this2.appendFoodToMeal($food, mealName);
-	        }).catch(errorLog);
-	      };
-
-	      for (var i = 0; i < foods.length; i++) {
-	        _loop();
+	      var checkedFoods = $('.add-foods-table').find('input:checked');
+	      for (var i = 0; i < checkedFoods.length; i++) {
+	        var $food = $(checkedFoods[i]).parent().parent();
+	        fetch(this.baseUrl + '/' + mealId + '/foods/' + $food.attr('id'), this.postFoodToMealConfig()).then(handleResponse).then(this.appendFoodToMeal($food, mealName)).then($(checkedFoods[i]).prop('checked', false)).catch(errorLog);
 	      }
 	    }
 	  }, {
 	    key: 'deleteFoodFromMeal',
 	    value: function deleteFoodFromMeal(e) {
-	      var _this3 = this;
+	      var _this2 = this;
 
 	      var mealId = e.target.parentNode.parentNode.id;
 	      var foodId = e.target.parentNode.id;
 	      fetch(this.baseUrl + '/' + mealId + '/foods/' + foodId, { method: "DELETE" }).then(function (response) {
-	        return _this3.removeFoodRow(e);
+	        return _this2.removeFoodRow(e);
 	      }).catch(errorLog);
 	    }
 	  }, {
