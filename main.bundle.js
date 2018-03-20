@@ -72,10 +72,6 @@
 	  foodService.validateFoodPatch(e);
 	});
 
-	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
-	});
-
 	$('input[name="filter"]').on('keyup', function () {
 	  foodService.filterFoods();
 	});
@@ -397,12 +393,14 @@
 	  }, {
 	    key: 'addMeals',
 	    value: function addMeals(meals) {
+	      var dailyCalories = this.calculateTotalCal(meals);
 	      for (var i = 0; i < meals.length; i++) {
 	        $('#' + meals[i].name.toLowerCase()).find('table').html('<th>Name</th><th>Calories</th>');
 	        var foods = this.sortFoods(meals[i].foods);
 	        this.appendFoods(foods, meals[i].name);
 	        this.appendMealTotalCal(foods, meals[i].name);
 	      }
+	      this.appendTotalsTable(dailyCalories);
 	    }
 	  }, {
 	    key: 'sortFoods',
@@ -475,6 +473,43 @@
 	          return '<tr class="remaining_cals">\n        <td>Calories Remaining:</td>\n        <td class="positive-cal">' + (_goal3 - total_cal) + '</td>\n        </tr>';
 	        }
 	      }
+	    }
+	  }, {
+	    key: 'appendTotalsTable',
+	    value: function appendTotalsTable(dailyCalories) {
+	      $("#totals").append(this.getTotalGoalCalRow()).append(this.getCalorieConsumedRow(dailyCalories)).append(this.getRemainingCaloriesRow(dailyCalories));
+	    }
+	  }, {
+	    key: 'getTotalGoalCalRow',
+	    value: function getTotalGoalCalRow() {
+	      return '<tr>\n              <td>Goal Calories</td>\n              <td id="goal-caalories">2000</td>\n            </tr>';
+	    }
+	  }, {
+	    key: 'getCalorieConsumedRow',
+	    value: function getCalorieConsumedRow(dailyCalories) {
+	      return '<tr>\n              <td>Calories Consumed</td>\n              <td id="calories-consumed">' + dailyCalories + '</td>\n            </tr>';
+	    }
+	  }, {
+	    key: 'getRemainingCaloriesRow',
+	    value: function getRemainingCaloriesRow(dailyCalories) {
+	      if (2000 - dailyCalories > 0) {
+	        return '<tr>\n      <td>Remaining Calories</td>\n      <td id="positive-remaining-calories">' + (2000 - dailyCalories) + '</td></tr>';
+	      } else if (2000 - dailyCalories < 0) {
+	        return '<tr>\n      <td>Remaining Calories</td>\n      <td id="negative-remaining-calories">' + (2000 - dailyCalories) + '</td></tr>';
+	      }
+	    }
+	  }, {
+	    key: 'calculateTotalCal',
+	    value: function calculateTotalCal(meals) {
+	      var dailyTotal = 0;
+	      for (var i = 0; i < meals.length; i++) {
+	        var mealTotal = 0;
+	        meals[i].foods.forEach(function (food) {
+	          mealTotal += food.calories;
+	        });
+	        dailyTotal += mealTotal;
+	      }
+	      return dailyTotal;
 	    }
 	  }]);
 
