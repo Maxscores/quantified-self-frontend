@@ -247,16 +247,26 @@
 	    key: "filterFoods",
 	    value: function filterFoods() {
 	      var filter = $('input[name="filter"]').val().toLowerCase();
-	      var foods = $('.food');
+	      var foods = this.setFilterTable();
 	      if (filter !== "") {
 	        foods.hide();
 	        $.each(foods, function (index, food) {
-	          if (food.innerHTML.toLowerCase().includes(filter)) {
-	            $("#" + food.id).show();
+	          if ($(food).find('#name').html().toLowerCase().includes(filter)) {
+	            $(food).show();
 	          }
 	        });
 	      } else {
 	        foods.show();
+	      }
+	    }
+	  }, {
+	    key: "setFilterTable",
+	    value: function setFilterTable() {
+	      var uri = window.location.pathname;
+	      if (uri === '/' || uri === '') {
+	        return $('.add-foods-table').find('.food');
+	      } else if (uri === '/foods.html') {
+	        return $('.foods-table').find('.food');
 	      }
 	    }
 	  }]);
@@ -305,12 +315,12 @@
 	  }, {
 	    key: 'foodRowDeletable',
 	    value: function foodRowDeletable() {
-	      return '<tr class=\'food\' id=' + this.id + '>\n              <td contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
+	      return '<tr class=\'food\' id=' + this.id + '>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'foodRowCheckable',
 	    value: function foodRowCheckable() {
-	      return '<tr class=\'food\' id=\'' + this.id + '\'>\n              <td><input type="checkbox" id="' + this.id + '"> </td>\n              <td contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n            </tr>';
+	      return '<tr class=\'food\' id=\'' + this.id + '\'>\n              <td><input type="checkbox" id="' + this.id + '"> </td>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n            </tr>';
 	    }
 	  }]);
 
