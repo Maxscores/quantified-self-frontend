@@ -56,6 +56,13 @@
 	foodService.getFoods();
 	mealService.getMealFoods();
 
+	$('#meal-type').on('click', function (e) {
+	  e.preventDefault();
+	  var mealId = e.target.id;
+	  var mealName = e.target.value.toLowerCase();
+	  mealService.postFoodsToMeal(mealId, mealName);
+	});
+
 	$(".food-form").on('submit', function (e) {
 	  e.preventDefault();
 	  foodService.validateFood();
@@ -123,8 +130,21 @@
 	    key: "postFood",
 	    value: function postFood(foodInfo) {
 	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.newFoodObject).then(function (food) {
-	        return food.prependFood($('.foods-table tr:first'));
+	        return food.prependFood($('.foods-table'));
 	      }).then(this.clearFields).catch(errorLog);
+	    }
+	  }, {
+	    key: "newFoodObject",
+	    value: function newFoodObject(newFood) {
+	      return new Food(newFood.id, newFood.name, newFood.calories);
+	    }
+	  }, {
+	    key: "clearFields",
+	    value: function clearFields() {
+	      var $foodForm = $('.food-form');
+	      $foodForm.find('input[name="name"]').val("");
+	      $foodForm.find('input[name="calories"]').val("");
+	      $foodForm.find('.error').remove();
 	    }
 	  }, {
 	    key: "postConfig",
@@ -320,17 +340,17 @@
 	  }, {
 	    key: 'prependFood',
 	    value: function prependFood(table) {
-	      table.before(this.foodRowDeletable());
+	      table.find('tr:first').before(this.foodRowDeletable());
 	    }
 	  }, {
 	    key: 'foodRowDeletable',
 	    value: function foodRowDeletable() {
-	      return '<tr class=\'food\' id=' + this.id + '>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
+	      return '<tr class=\'food\' id=' + this.id + '>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td id="calories" contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'foodRowCheckable',
 	    value: function foodRowCheckable() {
-	      return '<tr class=\'food\' id=\'' + this.id + '\'>\n              <td><input type="checkbox" id="' + this.id + '"> </td>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td contentEditable>' + this.calories + '</td>\n            </tr>';
+	      return '<tr class=\'food\' id=\'' + this.id + '\'>\n              <td><input type="checkbox" id="' + this.id + '"> </td>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td id="calories" contentEditable>' + this.calories + '</td>\n            </tr>';
 	    }
 	  }]);
 
@@ -411,6 +431,41 @@
 	        this.appendMealTotalCal(foods, meals[i].name);
 	      }
 	      this.appendTotalsTable(dailyCalories);
+	    }
+	  }, {
+	    key: 'postFoodsToMeal',
+	    value: function postFoodsToMeal(mealId, mealName) {
+	      var _this2 = this;
+
+	      var foods = $('.add-foods-table').find('input:checked');
+
+	      var _loop = function _loop() {
+	        var $food = $(foods[i]).parent().parent();
+	        fetch(_this2.baseUrl + '/' + mealId + '/foods/' + $food.attr('id'), _this2.postFoodToMealConfig()).then(handleResponse).then(function (response) {
+	          return _this2.appendFoodToMeal($food, mealName);
+	        }).catch(errorLog);
+	      };
+
+	      for (var i = 0; i < foods.length; i++) {
+	        _loop();
+	      }
+	    }
+	  }, {
+	    key: 'appendFoodToMeal',
+	    value: function appendFoodToMeal($food, mealName) {
+	      var foodId = $food.attr('id');
+	      var foodName = $food.find('#name').html();
+	      var foodCalories = $food.find('#calories').html();
+	      var food = new Food(foodId, foodName, foodCalories);
+	      food.prependFood($('#' + mealName.toLowerCase()).find('table'));
+	    }
+	  }, {
+	    key: 'postFoodToMealConfig',
+	    value: function postFoodToMealConfig() {
+	      return {
+	        method: 'POST',
+	        headers: { 'Content-Type': "application/json" }
+	      };
 	    }
 	  }, {
 	    key: 'sortFoods',
@@ -503,9 +558,9 @@
 	    key: 'getRemainingCaloriesRow',
 	    value: function getRemainingCaloriesRow(dailyCalories) {
 	      if (2000 - dailyCalories > 0) {
-	        return '<tr>\n      <td>Remaining Calories</td>\n      <td id="positive-remaining-calories">' + (2000 - dailyCalories) + '</td></tr>';
+	        return '<tr>\n      <td>Remaining Calories</td>\n      <td class="positive-cal">' + (2000 - dailyCalories) + '</td></tr>';
 	      } else if (2000 - dailyCalories < 0) {
-	        return '<tr>\n      <td>Remaining Calories</td>\n      <td id="negative-remaining-calories">' + (2000 - dailyCalories) + '</td></tr>';
+	        return '<tr>\n      <td>Remaining Calories</td>\n      <td class="negative-cal">' + (2000 - dailyCalories) + '</td></tr>';
 	      }
 	    }
 	  }, {
