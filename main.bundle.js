@@ -63,6 +63,13 @@
 	  mealService.postFoodsToMeal(mealId, mealName);
 	});
 
+	$('.meal-container').on('click', function (e) {
+	  e.preventDefault();
+	  if (e.target.id === "delete") {
+	    mealService.deleteFoodFromMeal(e);
+	  }
+	});
+
 	$(".food-form").on('submit', function (e) {
 	  e.preventDefault();
 	  foodService.validateFood();
@@ -73,10 +80,6 @@
 	  if (e.target.id === "delete") {
 	    foodService.destroyFood(e);
 	  }
-	});
-
-	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
 	});
 
 	$(".foods-table").on("focusout", function (e) {
@@ -224,7 +227,6 @@
 	  }, {
 	    key: "patchFood",
 	    value: function patchFood(foodInfo, e) {
-
 	      fetch(this.baseUrl + "/" + e.target.parentNode.id, this.patchConfig(foodInfo)).then(handleResponse).catch(errorLog);
 	    }
 	  }, {
@@ -235,11 +237,6 @@
 	        headers: { 'Content-Type': "application/json" },
 	        body: JSON.stringify(foodInfo)
 	      };
-=======
-	        headers: { 'Content-Type': "application/json" },
-	        body: JSON.stringify(foodInfo)
-	      };
->>>>>>> run npm run build
 	    }
 	  }, {
 	    key: "destroyFood",
@@ -449,6 +446,22 @@
 	      for (var i = 0; i < foods.length; i++) {
 	        _loop();
 	      }
+	    }
+	  }, {
+	    key: 'deleteFoodFromMeal',
+	    value: function deleteFoodFromMeal(e) {
+	      var _this3 = this;
+
+	      var mealId = e.target.parentNode.parentNode.id;
+	      var foodId = e.target.parentNode.id;
+	      fetch(this.baseUrl + '/' + mealId + '/foods/' + foodId, { method: "DELETE" }).then(function (response) {
+	        return _this3.removeFoodRow(e);
+	      }).catch(errorLog);
+	    }
+	  }, {
+	    key: 'removeFoodRow',
+	    value: function removeFoodRow(e) {
+	      e.target.parentNode.remove();
 	    }
 	  }, {
 	    key: 'appendFoodToMeal',
