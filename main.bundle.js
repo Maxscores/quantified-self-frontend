@@ -64,8 +64,8 @@
 	});
 
 	$('.meal-container').on('click', function (e) {
-	  e.preventDefault();
 	  if (e.target.id === "delete") {
+	    e.preventDefault();
 	    mealService.deleteFoodFromMeal(e);
 	  }
 	});
@@ -76,8 +76,8 @@
 	});
 
 	$(".foods-table").on('click', function (e) {
-	  e.preventDefault();
 	  if (e.target.id === "delete") {
+	    e.preventDefault();
 	    foodService.destroyFood(e);
 	  }
 	});
@@ -257,20 +257,6 @@
 	      }
 	    }
 	  }, {
-	    key: "postFood",
-	    value: function postFood(foodInfo) {
-	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.getFoods()).catch(errorLog);
-	    }
-	  }, {
-	    key: "postConfig",
-	    value: function postConfig(foodInfo) {
-	      return {
-	        method: 'POST',
-	        headers: { 'Content-Type': "application/json" },
-	        body: JSON.stringify(foodInfo)
-	      };
-	    }
-	  }, {
 	    key: "filterFoods",
 	    value: function filterFoods() {
 	      var filter = $('input[name="filter"]').val().toLowerCase();
@@ -300,9 +286,6 @@
 
 	  return FoodService;
 	}();
-
-	// module.exports = {Food:Food, getFoods:getFoods}
-
 
 	module.exports = FoodService;
 
