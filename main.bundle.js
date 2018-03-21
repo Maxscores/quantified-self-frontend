@@ -86,12 +86,15 @@
 	  foodService.validateFoodPatch(e);
 	});
 
-	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
-	});
-
 	$('input[name="filter"]').on('keyup', function () {
 	  foodService.filterFoods();
+	});
+
+	$(".foods-table").on("click", function (e) {
+	  if (e.target.innerHTML === "Calories") {
+	    e.preventDefault();
+	    foodService.sortCalories();
+	  }
 	});
 
 /***/ }),
@@ -103,6 +106,8 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -117,10 +122,16 @@
 	  function FoodService() {
 	    _classCallCheck(this, FoodService);
 
-	    this.baseUrl = "https://qs-1710-rails.herokuapp.com/api/v1/foods";
+	    this.baseUrl = "https://qs-1710-rails.herokuapp.com/api/v1/foods", this.counter = 0, this.foods = [];
 	  }
 
 	  _createClass(FoodService, [{
+	    key: "storeFoods",
+	    value: function storeFoods(foods) {
+	      this.foods = [].concat(_toConsumableArray(foods));
+	      return this.foods;
+	    }
+	  }, {
 	    key: "getFoods",
 	    value: function getFoods() {
 	      var _this = this;
@@ -128,7 +139,9 @@
 	      $('.foods-table').html('<th>Name</th><th>Calories</th>');
 	      $('.add-foods-table').html('<th></th><th>Name</th><th>Calories</th>');
 	      fetch(this.baseUrl).then(handleResponse).then(function (foods) {
-	        return _this.sortFoods(foods);
+	        return _this.sortFoods(foods, "id");
+	      }).then(function (foods) {
+	        return _this.storeFoods(foods);
 	      }).then(function (foods) {
 	        return _this.appendFoods(foods);
 	      }).catch(errorLog);
@@ -164,14 +177,27 @@
 	    }
 	  }, {
 	    key: "sortFoods",
-	    value: function sortFoods(foods) {
+	    value: function sortFoods(foods, attribute) {
+	      var _this2 = this;
+
 	      return foods.sort(function (food1, food2) {
-	        if (food1.id < food2.id) {
+	        if (_this2.sortMethod(food1, food2, attribute)) {
 	          return 1;
 	        } else {
 	          return -1;
 	        }
 	      });
+	    }
+	  }, {
+	    key: "sortMethod",
+	    value: function sortMethod(food1, food2, attribute) {
+	      if (attribute === "id") {
+	        return food1.id < food2.id;
+	      } else if (attribute === "calAsc") {
+	        return food1.calories < food2.calories;
+	      } else if (attribute === "calDesc") {
+	        return food1.calories > food2.calories;
+	      }
 	    }
 	  }, {
 	    key: "appendFoods",
@@ -245,10 +271,10 @@
 	  }, {
 	    key: "destroyFood",
 	    value: function destroyFood(e) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      fetch(this.baseUrl + "/" + e.target.parentNode.id, { method: "DELETE" }).then(function (response) {
-	        return _this2.removeFoodFromDom(response, e);
+	        return _this3.removeFoodFromDom(response, e);
 	      }).catch(errorLog);
 	    }
 	  }, {
@@ -285,6 +311,23 @@
 	      } else if (uri === '/foods.html') {
 	        return $('.foods-table').find('.food');
 	      }
+	    }
+	  }, {
+	    key: "sortCalories",
+	    value: function sortCalories() {
+	      var foods = this.foods;
+	      if (this.counter === 0) {
+	        foods = this.sortFoods(foods, "calAsc");
+	        this.counter++;
+	      } else if (this.counter === 1) {
+	        foods = this.sortFoods(foods, "calDesc");
+	        this.counter++;
+	      } else if (this.counter === 2) {
+	        foods = this.sortFoods(foods, "id");
+	        this.counter = 0;
+	      }
+	      $(".foods-table").find("tr").remove();
+	      this.appendFoods(foods);
 	    }
 	  }]);
 
