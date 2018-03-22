@@ -86,10 +86,6 @@
 	  foodService.validateFoodPatch(e);
 	});
 
-	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
-	});
-
 	$('input[name="filter"]').on('keyup', function () {
 	  foodService.filterFoods();
 	});
@@ -486,10 +482,30 @@
 	      var _this2 = this;
 
 	      var mealId = e.target.parentNode.parentNode.id;
+	      var mealName = e.target.parentNode.parentNode.parentNode.id;
 	      var foodId = e.target.parentNode.id;
 	      fetch(this.baseUrl + '/' + mealId + '/foods/' + foodId, { method: "DELETE" }).then(function (response) {
 	        return _this2.removeFoodRow(e);
+	      }).then(function (response) {
+	        return _this2.deleteFoodFromMealObject(mealName, foodId);
+	      }).then(function (response) {
+	        return _this2.updateMealCalAfterDelete(mealName);
 	      }).catch(errorLog);
+	    }
+	  }, {
+	    key: 'updateMealCalAfterDelete',
+	    value: function updateMealCalAfterDelete(mealName) {
+	      var foods = this.meals[mealName];
+	      this.appendMealTotalCal(foods, mealName);
+	    }
+	  }, {
+	    key: 'deleteFoodFromMealObject',
+	    value: function deleteFoodFromMealObject(mealName, foodId) {
+	      var food = this.meals[mealName].find(function (food) {
+	        return food.id === foodId;
+	      });
+	      var index = this.meals[mealName].indexOf(food);
+	      this.meals[mealName].splice(index, 1);
 	    }
 	  }, {
 	    key: 'removeFoodRow',
