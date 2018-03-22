@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Manage Foods</title>
@@ -7,24 +7,26 @@
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
+  <main>
+
   <div class="main">
 
     <span class="title h2">Manage Foods</span>
     <a href="/" class="submit h2">Back to Diary</a>
 
     <div class="inputs">
-      <form class="content food-form h3">
+      <form  class="content food-form h3">
         <span class="form-title">Add New Foods</span>
         Name<br>
-        <input type="text" name="name" value="">
+        <input title="food name" label="food name" type="text" name="name" value="">
         Calories<br>
-        <input type="number" name="calories" value="">
-        <input type="submit" name="" value="Add Food">
+        <input title="calories" label="calories" type="number" name="calories" value="">
+        <input title="submit" label="submit" type="submit" name="submit" value="Add Food">
       </form>
 
       <form class="content filter h3">
         Filter by Name:<br>
-        <input type="text" name="filter" value="">
+        <input title="filter" label="filter" type="text" name="filter" value="">
       </form>
     </div>
 
@@ -33,6 +35,7 @@
       <th id="foods-calories">Calories</th>
     </table>
   </div>
+  </main>
   <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src="main.bundle.js"></script>
 </body>
