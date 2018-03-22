@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Diary</title>
@@ -8,55 +8,58 @@
 
 </head>
 <body>
-  <div class="main">
-    <span class="title h1" tabindex="0">Meal Diary</span>
+  <main>
+
+    <div class="main">
+      <span class="title h1" tabindex="0">Meal Diary</span>
       <table class="content h3" id="totals">
       </table>
-    <div class="meal-container" id="breakfast">
-      <span class="title h2" tabindex="0">Breakfast</span>
-      <table class="content h3" id="1">
-      </table>
-    </div>
-
-    <div class="meal-container" id="lunch">
-      <span class="title h2" tabindex="0">Lunch</span>
-      <table class="content h3" id="3">
-      </table>
-    </div>
-
-    <div class="meal-container" id="dinner">
-      <span class="title h2" tabindex="0">Dinner</span>
-      <table class="content h3" id="4">
-      </table>
-    </div>
-
-    <div class="meal-container" id="snack">
-      <span class="title h2" tabindex="0">Snack</span>
-      <table class="content h3" id="2">
-      </table>
-    </div>
-
-    <div class="meal-container h3" id="add-food">
-      <span class="title h2" tabindex="0">Add Foods to Meal</span>
-      <a href="/foods.html" class="submit">Create New Food</a>
-      <div class="content h3" id="meal-type">
-        Add To Meal<br>
-        <input type="submit" value="Breakfast" id="1" tabindex="0">
-        <input type="submit" value="Lunch" id="3" tabindex="0">
-        <input type="submit" value="Dinner" id="4" tabindex="0">
-        <input type="submit" value="Snack" id="2" tabindex="0">
+      <div class="meal-container" id="breakfast">
+        <span class="title h2" tabindex="0">Breakfast</span>
+        <table class="content h3" id="1">
+        </table>
       </div>
-      <form class="content filter h3">
-        Filter by Name:<br>
-        <input type="text" name="filter" value="">
-      </form>
-      <table class="content add-foods-table h3">
 
-      </table>
+      <div class="meal-container" id="lunch">
+        <span class="title h2" tabindex="0">Lunch</span>
+        <table class="content h3" id="3">
+        </table>
+      </div>
+
+      <div class="meal-container" id="dinner">
+        <span class="title h2" tabindex="0">Dinner</span>
+        <table class="content h3" id="4">
+        </table>
+      </div>
+
+      <div class="meal-container" id="snack">
+        <span class="title h2" tabindex="0">Snack</span>
+        <table class="content h3" id="2">
+        </table>
+      </div>
+
+      <div class="meal-container h3" id="add-food">
+        <span class="title h2" tabindex="0">Add Foods to Meal</span>
+        <a href="/foods.html" class="submit">Create New Food</a>
+        <div class="content h3" id="meal-type">
+          Add To Meal<br>
+          <input type="submit" value="Breakfast" id="1" tabindex="0">
+          <input type="submit" value="Lunch" id="3" tabindex="0">
+          <input type="submit" value="Dinner" id="4" tabindex="0">
+          <input type="submit" value="Snack" id="2" tabindex="0">
+        </div>
+        <form class="content filter h3">
+          Filter by Name:<br>
+          <input title="filter" label="filter" type="text" name="filter" value="">
+        </form>
+        <table class="content add-foods-table h3">
+
+        </table>
+      </div>
     </div>
-  </div>
 
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-  <script src="main.bundle.js"></script>
+  </main>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src="main.bundle.js"></script>
 </body>
 </html>
