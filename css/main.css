@@ -108,9 +108,9 @@ tr {
 }
 
 .delete {
-  color: red;
+  /* color: red;
   background-color: white;
   border-radius: 30px;
-  font-size: 5rem;
+  font-size: 5rem; */
   text-align: center;
 }
