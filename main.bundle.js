@@ -464,8 +464,7 @@
 	        this.appendFoods(foods, meals[i].name);
 	        this.appendMealTotalCal(foods, meals[i].name);
 	      }
-	      var dailyCalories = this.calculateTotalCal(this.meals);
-	      this.appendTotalsTable(dailyCalories);
+	      this.appendTotalsTable();
 	    }
 	  }, {
 	    key: 'postFoodsToMeal',
@@ -473,7 +472,7 @@
 	      var checkedFoods = $('.add-foods-table').find('input:checked');
 	      for (var i = 0; i < checkedFoods.length; i++) {
 	        var $food = $(checkedFoods[i]).parent().parent();
-	        fetch(this.baseUrl + '/' + mealId + '/foods/' + $food.attr('id'), this.postFoodToMealConfig()).then(handleResponse).then(this.appendFoodToMeal($food, mealName)).then(this.appendMealTotalCal(this.meals[mealName], mealName)).then($(checkedFoods[i]).prop('checked', false)).catch(errorLog);
+	        fetch(this.baseUrl + '/' + mealId + '/foods/' + $food.attr('id'), this.postFoodToMealConfig()).then(handleResponse).then(this.appendFoodToMeal($food, mealName)).then(this.appendMealTotalCal(this.meals[mealName], mealName)).then($(checkedFoods[i]).prop('checked', false)).then(this.appendTotalsTable()).catch(errorLog);
 	      }
 	    }
 	  }, {
@@ -490,7 +489,7 @@
 	        return _this2.deleteFoodFromMealObject(mealName, foodId);
 	      }).then(function (response) {
 	        return _this2.updateMealCalAfterDelete(mealName);
-	      }).catch(errorLog);
+	      }).then(this.appendTotalsTable()).catch(errorLog);
 	    }
 	  }, {
 	    key: 'updateMealCalAfterDelete',
@@ -580,7 +579,6 @@
 	  }, {
 	    key: 'remainingCaloriesRow',
 	    value: function remainingCaloriesRow(total_cal, meal) {
-
 	      if (this.mealCalorieGoals[meal] < total_cal) {
 	        return '<tr class="remaining_cals">\n      <td>Calories Remaining:</td>\n      <td class="negative-cal">' + (this.mealCalorieGoals[meal] - total_cal) + '</td>\n      </tr>';
 	      } else if (this.mealCalorieGoals[meal] > total_cal) {
@@ -589,7 +587,9 @@
 	    }
 	  }, {
 	    key: 'appendTotalsTable',
-	    value: function appendTotalsTable(dailyCalories) {
+	    value: function appendTotalsTable() {
+	      var dailyCalories = this.calculateTotalCal(this.meals);
+	      $("#totals").find("tr").remove();
 	      $("#totals").append(this.getTotalGoalCalRow()).append(this.getCalorieConsumedRow(dailyCalories)).append(this.getRemainingCaloriesRow(dailyCalories));
 	    }
 	  }, {
