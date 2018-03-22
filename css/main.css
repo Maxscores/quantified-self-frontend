@@ -78,8 +78,9 @@ table {
   border-collapse: collapse;
 }
 
-th {
-  width: 50%;
+th, td {
+  width: 45%;
+  text-align: left;
 }
 
 tr {
@@ -88,6 +89,7 @@ tr {
   /* border-top: 10px solid #88D498; */
   /* border-top: 10px solid #D9E5D6; */
 }
+
 
 .meal-container {
   width: 100%;
@@ -103,4 +105,12 @@ tr {
 
 .positive-cal{
   color:green;
+}
+
+.delete {
+  color: red;
+  background-color: white;
+  border-radius: 30px;
+  font-size: 5rem;
+  text-align: center;
 }
