@@ -86,10 +86,6 @@
 	  foodService.validateFoodPatch(e);
 	});
 
-	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
-	});
-
 	$('input[name="filter"]').on('keyup', function () {
 	  foodService.filterFoods();
 	});
@@ -461,7 +457,6 @@
 	  }, {
 	    key: 'addMeals',
 	    value: function addMeals(meals) {
-
 	      for (var i = 0; i < meals.length; i++) {
 	        this.meals[meals[i].name.toLowerCase()] = meals[i].foods;
 	        $('#' + meals[i].name.toLowerCase()).find('table').html('<th>Name</th><th>Calories</th>');
@@ -543,7 +538,6 @@
 	      foods.forEach(function (food) {
 	        total_cal += food.calories;
 	      });
-
 	      this.appendCalorieRows($('#' + meal.toLowerCase()).find('table'), total_cal, meal);
 	    }
 	  }, {
@@ -556,7 +550,7 @@
 	    key: 'appendCalorieRows',
 	    value: function appendCalorieRows(table, total_cal, meal) {
 	      table.append(this.totalCalRow(total_cal));
-	      table.append(this.remainingCaloriesRow(total_cal, meal));
+	      table.append(this.remainingCaloriesRow(total_cal, meal.toLowerCase()));
 	    }
 	  }, {
 	    key: 'totalCalRow',
