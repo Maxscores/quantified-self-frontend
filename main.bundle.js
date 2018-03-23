@@ -58,13 +58,13 @@
 
 	$('#meal-type').on('click', function (e) {
 	  e.preventDefault();
-	  var mealId = e.target.id;
+	  var mealId = e.target.dataset.id;
 	  var mealName = e.target.value.toLowerCase();
 	  mealService.postFoodsToMeal(mealId, mealName);
 	});
 
 	$('.meal-container').on('click', function (e) {
-	  if (e.target.id === "delete") {
+	  if (e.target.className.includes("delete")) {
 	    e.preventDefault();
 	    mealService.deleteFoodFromMeal(e);
 	  }
@@ -76,24 +76,32 @@
 	});
 
 	$(".foods-table").on('click', function (e) {
-	  if (e.target.id === "delete") {
+	  if (e.target.className.includes("delete")) {
 	    e.preventDefault();
 	    foodService.destroyFood(e);
+	  } else if (e.target.innerHTML === "Calories") {
+	    e.preventDefault();
+	    foodService.sortCalories();
 	  }
 	});
 
 	$(".foods-table").on("focusout", function (e) {
-	  foodService.validateFoodPatch(e);
+	  if (!e.target.className.includes("delete")) {
+	    foodService.validateFoodPatch(e);
+	  }
 	});
 
 	$('input[name="filter"]').on('keyup', function () {
 	  foodService.filterFoods();
 	});
 
-	$(".foods-table").on("click", function (e) {
-	  if (e.target.innerHTML === "Calories") {
-	    e.preventDefault();
-	    foodService.sortCalories();
+	$('.title').on('click', function (e) {
+	  $(e.target).siblings('.hidden').first().slideToggle();
+	});
+
+	$('.title').on('keydown', function (e) {
+	  if (e.keyCode === 13) {
+	    $(e.target).siblings('.hidden').first().slideToggle();
 	  }
 	});
 
@@ -150,7 +158,7 @@
 	    key: "postFood",
 	    value: function postFood(foodInfo) {
 	      fetch(this.baseUrl, this.postConfig(foodInfo)).then(handleResponse).then(this.newFoodObject).then(function (food) {
-	        return food.prependFood($('.foods-table'));
+	        return food.prependFood($('.foods-table'), 'edit');
 	      }).then(this.clearFields).catch(errorLog);
 	    }
 	  }, {
@@ -205,7 +213,7 @@
 	      return foods.forEach(function (newFood) {
 	        var food = new Food(newFood.id, newFood.name, newFood.calories);
 	        food.appendFood($('.add-foods-table'), 'checkbox');
-	        food.appendFood($('.foods-table'), 'delete');
+	        food.appendFood($('.foods-table'), 'edit');
 	      });
 	    }
 	  }, {
@@ -233,11 +241,10 @@
 	  }, {
 	    key: "validateFoodPatch",
 	    value: function validateFoodPatch(e) {
-	      var rowId = e.target.parentNode.id;
-	      var $foodsRow = $("tr#" + rowId);
+	      var rowId = e.target.parentNode.dataset.id;
+	      var $foodsRow = $("tr[data-id=" + rowId + "]");
 	      var editFoodNameField = $foodsRow.find('td:nth-child(1)');
 	      var editFoodCalorieField = $foodsRow.find('td:nth-child(2)');
-
 	      if (editFoodNameField.html() === "") {
 	        $('.error:first').remove();
 	        editFoodNameField.after('<span class="error"><br>Please enter a food name</span>');
@@ -251,13 +258,13 @@
 	            calories: editFoodCalorieField.html()
 	          }
 	        };
-	        this.patchFood(foodInfo, e);
+	        this.patchFood(foodInfo, rowId);
 	      }
 	    }
 	  }, {
 	    key: "patchFood",
-	    value: function patchFood(foodInfo, e) {
-	      fetch(this.baseUrl + "/" + e.target.parentNode.id, this.patchConfig(foodInfo)).then(handleResponse).catch(errorLog);
+	    value: function patchFood(foodInfo, rowId) {
+	      fetch(this.baseUrl + "/" + rowId, this.patchConfig(foodInfo)).then(handleResponse).catch(errorLog);
 	    }
 	  }, {
 	    key: "patchConfig",
@@ -273,7 +280,7 @@
 	    value: function destroyFood(e) {
 	      var _this3 = this;
 
-	      fetch(this.baseUrl + "/" + e.target.parentNode.id, { method: "DELETE" }).then(function (response) {
+	      fetch(this.baseUrl + "/" + e.target.parentNode.parentNode.dataset.id, { method: "DELETE" }).then(function (response) {
 	        return _this3.removeFoodFromDom(response, e);
 	      }).catch(errorLog);
 	    }
@@ -294,7 +301,7 @@
 	      if (filter !== "") {
 	        foods.hide();
 	        $.each(foods, function (index, food) {
-	          if ($(food).find('#name').html().toLowerCase().includes(filter)) {
+	          if ($(food).find('[data-id="name"]').html().toLowerCase().includes(filter)) {
 	            $(food).show();
 	          }
 	        });
@@ -362,22 +369,35 @@
 	        table.append(this.foodRowDeletable());
 	      } else if (type === 'checkbox') {
 	        table.append(this.foodRowCheckable());
+	      } else if (type === "edit") {
+	        table.append(this.foodRowEditable());
 	      }
 	    }
 	  }, {
 	    key: 'prependFood',
-	    value: function prependFood(table) {
-	      table.find('tr:first').before(this.foodRowDeletable());
+	    value: function prependFood(table, type) {
+	      if (type === 'delete') {
+	        table.find('tr:first').before(this.foodRowDeletable());
+	      } else if (type === 'checkbox') {
+	        table.find('tr:first').before(this.foodRowCheckable());
+	      } else if (type === "edit") {
+	        table.find('tr:first').before(this.foodRowEditable());
+	      }
+	    }
+	  }, {
+	    key: 'foodRowEditable',
+	    value: function foodRowEditable() {
+	      return '<tr class=\'food\' data-id=' + this.id + '>\n              <td data-id="name" contentEditable>' + this.name + '</td>\n              <td data-id="calories" contentEditable>' + this.calories + '</td>\n              <td>\n                <img class="delete" data-id="delete" tabindex="0" src="/delete.png" alt="delete">\n              </td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'foodRowDeletable',
 	    value: function foodRowDeletable() {
-	      return '<tr class=\'food\' id=' + this.id + '>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td id="calories" contentEditable>' + this.calories + '</td>\n              <td id="delete">delete</td>\n            </tr>';
+	      return '<tr class=\'food\' data-id=' + this.id + '>\n              <td data-id="name">' + this.name + '</td>\n              <td data-id="calories">' + this.calories + '</td>\n              <td>\n                <img class="delete" data-id="delete" tabindex="0" src="/delete.png" alt="delete">\n              </td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'foodRowCheckable',
 	    value: function foodRowCheckable() {
-	      return '<tr class=\'food\' id=\'' + this.id + '\'>\n              <td><input type="checkbox" id="' + this.id + '"> </td>\n              <td id="name" contentEditable>' + this.name + '</td>\n              <td id="calories" contentEditable>' + this.calories + '</td>\n            </tr>';
+	      return '<tr class=\'food\' data-id=\'' + this.id + '\'>\n              <td><input title="' + this.name + '" label="' + this.name + '" type="checkbox" data-id="' + this.id + '"> </td>\n              <td data-id="name">' + this.name + '</td>\n              <td data-id="calories">' + this.calories + '</td>\n            </tr>';
 	    }
 	  }]);
 
@@ -472,7 +492,7 @@
 	      var checkedFoods = $('.add-foods-table').find('input:checked');
 	      for (var i = 0; i < checkedFoods.length; i++) {
 	        var $food = $(checkedFoods[i]).parent().parent();
-	        fetch(this.baseUrl + '/' + mealId + '/foods/' + $food.attr('id'), this.postFoodToMealConfig()).then(handleResponse).then(this.appendFoodToMeal($food, mealName)).then(this.appendMealTotalCal(this.meals[mealName], mealName)).then($(checkedFoods[i]).prop('checked', false)).then(this.appendTotalsTable()).catch(errorLog);
+	        fetch(this.baseUrl + '/' + mealId + '/foods/' + $food.data('id'), this.postFoodToMealConfig()).then(handleResponse).then(this.appendFoodToMeal($food, mealName)).then(this.appendMealTotalCal(this.meals[mealName], mealName)).then($(checkedFoods[i]).prop('checked', false)).then(this.appendTotalsTable()).catch(errorLog);
 	      }
 	    }
 	  }, {
@@ -480,9 +500,9 @@
 	    value: function deleteFoodFromMeal(e) {
 	      var _this2 = this;
 
-	      var mealId = e.target.parentNode.parentNode.id;
-	      var mealName = e.target.parentNode.parentNode.parentNode.id;
-	      var foodId = e.target.parentNode.id;
+	      var mealId = e.target.parentNode.parentNode.parentNode.id;
+	      var mealName = e.target.parentNode.parentNode.parentNode.parentNode.id;
+	      var foodId = e.target.parentNode.parentNode.dataset.id;
 	      fetch(this.baseUrl + '/' + mealId + '/foods/' + foodId, { method: "DELETE" }).then(function (response) {
 	        return _this2.removeFoodRow(e);
 	      }).then(function (response) {
@@ -509,16 +529,16 @@
 	  }, {
 	    key: 'removeFoodRow',
 	    value: function removeFoodRow(e) {
-	      e.target.parentNode.remove();
+	      e.target.parentNode.parentNode.remove();
 	    }
 	  }, {
 	    key: 'appendFoodToMeal',
 	    value: function appendFoodToMeal($food, mealName) {
 	      var foodId = $food.attr('id');
-	      var foodName = $food.find('#name').html();
-	      var foodCalories = $food.find('#calories').html();
+	      var foodName = $food.find('[data-id=name]').html();
+	      var foodCalories = $food.find('[data-id=calories]').html();
 	      var food = new Food(foodId, foodName, foodCalories);
-	      food.prependFood($('#' + mealName.toLowerCase()).find('table'));
+	      food.prependFood($('#' + mealName.toLowerCase()).find('table'), 'delete');
 	      mealName = mealName.toLowerCase();
 	      this.meals[mealName].push(food);
 	    }
@@ -574,15 +594,15 @@
 	  }, {
 	    key: 'totalCalRow',
 	    value: function totalCalRow(total_cal) {
-	      return '<tr class=meal_total>\n              <td class="total_cal_label">Total Calories:</td>\n              <td class="total_calories">' + total_cal + '</td>\n            </tr>';
+	      return '<tr class=meal_total>\n              <td class="total_cal_label">Total Calories:</td>\n              <td class="total_calories">' + total_cal + '</td>\n              <td></td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'remainingCaloriesRow',
 	    value: function remainingCaloriesRow(total_cal, meal) {
 	      if (this.mealCalorieGoals[meal] < total_cal) {
-	        return '<tr class="remaining_cals">\n      <td>Calories Remaining:</td>\n      <td class="negative-cal">' + (this.mealCalorieGoals[meal] - total_cal) + '</td>\n      </tr>';
+	        return '<tr class="remaining_cals">\n      <td>Calories Remaining:</td>\n      <td class="negative-cal">' + (this.mealCalorieGoals[meal] - total_cal) + '</td>\n      <td></td>\n      </tr>';
 	      } else if (this.mealCalorieGoals[meal] > total_cal) {
-	        return '<tr class="remaining_cals">\n      <td>Calories Remaining:</td>\n      <td class="positive-cal">' + (this.mealCalorieGoals[meal] - total_cal) + '</td>\n      </tr>';
+	        return '<tr class="remaining_cals">\n      <td>Calories Remaining:</td>\n      <td class="positive-cal">' + (this.mealCalorieGoals[meal] - total_cal) + '</td>\n      <td></td>\n      </tr>';
 	      }
 	    }
 	  }, {
@@ -595,7 +615,7 @@
 	  }, {
 	    key: 'getTotalGoalCalRow',
 	    value: function getTotalGoalCalRow() {
-	      return '<tr>\n              <td>Goal Calories</td>\n              <td id="goal-caalories">2000</td>\n            </tr>';
+	      return '\n              <td>Goal Calories</td>\n              <td id="goal-caalories">2000</td>\n            ';
 	    }
 	  }, {
 	    key: 'getCalorieConsumedRow',
@@ -606,9 +626,9 @@
 	    key: 'getRemainingCaloriesRow',
 	    value: function getRemainingCaloriesRow(dailyCalories) {
 	      if (2000 - dailyCalories > 0) {
-	        return '<tr>\n      <td>Remaining Calories</td>\n      <td class="positive-cal">' + (2000 - dailyCalories) + '</td></tr>';
+	        return '<tr>\n      <td>Remaining Calories</td>\n      <td class="positive-cal">' + (2000 - dailyCalories) + '</td>\n      </tr>';
 	      } else if (2000 - dailyCalories < 0) {
-	        return '<tr>\n      <td>Remaining Calories</td>\n      <td class="negative-cal">' + (2000 - dailyCalories) + '</td></tr>';
+	        return '<tr>\n      <td>Remaining Calories</td>\n      <td class="negative-cal">' + (2000 - dailyCalories) + '</td>\n      </tr>';
 	      }
 	    }
 	  }, {
