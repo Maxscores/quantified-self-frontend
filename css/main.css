@@ -1,10 +1,19 @@
+.hidden {
+  display: none;
+}
+
 .title {
-  padding: 1.5rem;
+  padding: 1.5rem 0;
+  margin: 0.5rem 0;
   text-align: center;
   background-color: #F5F749;
   /* background-color: #88D498;   */
   /* background-color: #D9E5D6; */
   width: 100%;
+}
+
+.title:focus, .title:hover {
+  border: 0.5rem #086788 solid;
 }
 
 .h1 {
@@ -19,9 +28,9 @@
 }
 
 .content {
-  margin: 3rem;
+  margin: 3rem 0;
   background-color: #D9E5D6;
-  border-radius: 3rem;
+  border-radius: 3rem 0;
   text-align: center;
   width: 80%;
 }
@@ -77,6 +86,7 @@ table {
 }
 
 th, td {
+  padding: 1rem;
   width: 40%;
   text-align: left;
 }
@@ -110,5 +120,12 @@ tr {
   background-color: white;
   border-radius: 30px;
   font-size: 5rem; */
+  text-align: center;
+}
+
+.meal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   text-align: center;
 }

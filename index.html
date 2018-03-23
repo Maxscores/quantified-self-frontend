@@ -9,52 +9,71 @@
 </head>
 <body>
   <main>
-
     <div class="main">
-      <span class="title h1" tabindex="0">Meal Diary</span>
+      <span class="title h1">Meal Diary</span>
       <table class="content h3" id="totals">
       </table>
-      <div class="meal-container" id="breakfast">
+
+      <div class="meal">
         <span class="title h2" tabindex="0">Breakfast</span>
-        <table class="content h3" id="1">
-        </table>
-      </div>
-
-      <div class="meal-container" id="lunch">
-        <span class="title h2" tabindex="0">Lunch</span>
-        <table class="content h3" id="3">
-        </table>
-      </div>
-
-      <div class="meal-container" id="dinner">
-        <span class="title h2" tabindex="0">Dinner</span>
-        <table class="content h3" id="4">
-        </table>
-      </div>
-
-      <div class="meal-container" id="snack">
-        <span class="title h2" tabindex="0">Snack</span>
-        <table class="content h3" id="2">
-        </table>
-      </div>
-
-      <div class="meal-container h3" id="add-food">
-        <span class="title h2" tabindex="0">Add Foods to Meal</span>
-        <a href="/foods.html" class="submit">Create New Food</a>
-        <div class="content h3" id="meal-type">
-          Add To Meal<br>
-          <input type="submit" value="Breakfast" data-id="1" tabindex="0">
-          <input type="submit" value="Lunch" data-id="3" tabindex="0">
-          <input type="submit" value="Dinner" data-id="4" tabindex="0">
-          <input type="submit" value="Snack" data-id="2" tabindex="0">
+        <div class="hidden">
+          <div class="meal-container" id="breakfast">
+            <table class="content h3" id="1">
+            </table>
+          </div>
         </div>
-        <form class="content filter h3">
-          Filter by Name:<br>
-          <input title="filter" label="filter" type="text" name="filter" value="">
-        </form>
-        <table class="content add-foods-table h3">
+      </div>
 
-        </table>
+      <div class="meal">
+        <span class="title h2" tabindex="0">Lunch</span>
+        <div class="hidden">
+          <div class="meal-container" id="lunch">
+            <table class="content h3" id="3">
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="meal">
+        <span class="title h2" tabindex="0">Dinner</span>
+        <div class="hidden">
+          <div class="meal-container" id="dinner">
+            <table class="content h3" id="4">
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="meal">
+        <span class="title h2" tabindex="0">Snack</span>
+        <div class="hidden">
+          <div class="meal-container" id="snack">
+            <table class="content h3" id="2">
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="meal">
+        <span class="title h2" tabindex="0">Add Foods to Meal</span>
+        <div class="hidden">
+          <div class="meal-container h3" id="add-food">
+            <a href="/foods.html" class="submit">Create New Food</a>
+            <div class="content h3" id="meal-type">
+              Add To Meal<br>
+              <input type="submit" value="Breakfast" data-id="1" tabindex="0">
+              <input type="submit" value="Lunch" data-id="3" tabindex="0">
+              <input type="submit" value="Dinner" data-id="4" tabindex="0">
+              <input type="submit" value="Snack" data-id="2" tabindex="0">
+            </div>
+            <form class="content filter h3">
+              Filter by Name:<br>
+              <input title="filter" label="filter" type="text" name="filter" value="">
+            </form>
+            <table class="content add-foods-table h3">
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
