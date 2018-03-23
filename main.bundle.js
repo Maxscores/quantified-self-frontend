@@ -91,7 +91,7 @@
 	  }
 	});
 
-	$('input[name="filter"]').on('keyup', function () {
+	$('input[name="filter"]').on('input', function () {
 	  foodService.filterFoods();
 	});
 
