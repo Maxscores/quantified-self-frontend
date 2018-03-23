@@ -387,12 +387,12 @@
 	  }, {
 	    key: 'foodRowEditable',
 	    value: function foodRowEditable() {
-	      return '<tr class=\'food\' data-id=' + this.id + '>\n              <td data-id="name" contentEditable>' + this.name + '</td>\n              <td data-id="calories" contentEditable>' + this.calories + '</td>\n              <td>\n                <img class="delete" data-id="delete" tabindex="0" src="/delete.png" alt="delete">\n              </td>\n            </tr>';
+	      return '<tr class=\'food\' data-id=' + this.id + '>\n              <td data-id="name" contentEditable>' + this.name + '</td>\n              <td data-id="calories" contentEditable>' + this.calories + '</td>\n              <td>\n                <img class="delete" data-id="delete" tabindex="0" src="./delete.png" alt="delete">\n              </td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'foodRowDeletable',
 	    value: function foodRowDeletable() {
-	      return '<tr class=\'food\' data-id=' + this.id + '>\n              <td data-id="name">' + this.name + '</td>\n              <td data-id="calories">' + this.calories + '</td>\n              <td>\n                <img class="delete" data-id="delete" tabindex="0" src="/delete.png" alt="delete">\n              </td>\n            </tr>';
+	      return '<tr class=\'food\' data-id=' + this.id + '>\n              <td data-id="name">' + this.name + '</td>\n              <td data-id="calories">' + this.calories + '</td>\n              <td>\n                <img class="delete" data-id="delete" tabindex="0" src="./delete.png" alt="delete">\n              </td>\n            </tr>';
 	    }
 	  }, {
 	    key: 'foodRowCheckable',
