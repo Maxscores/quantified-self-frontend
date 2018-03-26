@@ -130,7 +130,7 @@
 	  function FoodService() {
 	    _classCallCheck(this, FoodService);
 
-	    this.baseUrl = "https://qs-1710-rails.herokuapp.com/api/v1/foods", this.counter = 0, this.foods = [];
+	    this.baseUrl = "https://qs-1710-js.herokuapp.com/api/v1/foods", this.counter = 0, this.foods = [];
 	  }
 
 	  _createClass(FoodService, [{
