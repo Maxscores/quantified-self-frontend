@@ -1,8 +1,6 @@
 const Nightmare = require('nightmare')
 const assert = require('chai').assert
 
-
-
 describe("visit food page", function() {
   this.timeout(10000)
   it("Can create new food", done => {
