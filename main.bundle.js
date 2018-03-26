@@ -455,7 +455,7 @@
 	  function MealService() {
 	    _classCallCheck(this, MealService);
 
-	    this.baseUrl = "https://qs-1710-rails.herokuapp.com/api/v1/meals";
+	    this.baseUrl = "https://qs-1710-js.herokuapp.com/api/v1/meals";
 	    this.meals = {};
 	    this.mealCalorieGoals = {
 	      "breakfast": 400,
